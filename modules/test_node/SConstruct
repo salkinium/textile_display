@@ -1,0 +1,54 @@
+# WARNING: This file is generated automatically, do not edit!
+
+# path to the xpcc root directory
+rootpath = "../"
+xpccpath = rootpath + "../xpcc"
+
+# default target is 'avr'
+print "Compile for AVR"
+configfile = 'project.cfg'
+
+env = Environment(tools = ['xpcc'], toolpath = [xpccpath + '/scons'], configfile = configfile)
+
+# find all source files
+files = env.FindFiles(
+	path = [
+		'.',
+#		rootpath + '/arduino/core/',
+#		rootpath + '/arduino/libraries/'
+		])
+#for file in files.sources:
+#    print str(file)
+
+# build the xpcc library
+library = env.XpccLibrary()
+
+env.Append(CPPPATH = '.')
+#env.Append(CPPPATH = rootpath + '/arduino/core/')
+#env.Append(CPPPATH = rootpath + '/arduino/libraries/')
+
+# build the program
+program = env.Program(
+		target = env['XPCC_CONFIG']['general']['name'],
+		source = files.sources)
+
+env.Defines()
+
+#env.Alias('lib', library)
+env.Alias('build', program)
+env.Alias('size', env.Size(program))
+env.Alias('symbols', env.Symbols(program))
+
+hexfile = env.Hex(program)
+eepromfile = env.Eeprom(program)
+env.Alias('program', 'build')
+env.Alias('program', env.Avrdude(hexfile, eepromfile))
+env.Alias('fuse', env.AvrdudeFuses())
+
+env.Alias('build', hexfile)
+env.Alias('build', eepromfile)
+env.Alias('build', env.Listing(program))
+
+env.Alias('all', ['build', 'size'])
+ 
+env.Default('all')

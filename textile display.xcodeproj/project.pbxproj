@@ -1,0 +1,126 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		8591B03015DA8B47002EC4CA /* modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = modules; sourceTree = "<group>"; };
+		859B0CBD156C2449008BB03E /* xpcc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xpcc; path = ../xpcc/src/xpcc; sourceTree = "<group>"; };
+		859B0CBF156C24C2008BB03E /* xpcc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xpcc; path = ../xpcc; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		855A80891302F7C600E9FB14 = {
+			isa = PBXGroup;
+			children = (
+				8591B03015DA8B47002EC4CA /* modules */,
+				859B0CBD156C2449008BB03E /* xpcc */,
+				859B0CBF156C24C2008BB03E /* xpcc */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		85D9B74C156C2B04001A2501 /* test_node */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "";
+			buildConfigurationList = 85D9B74F156C2B04001A2501 /* Build configuration list for PBXLegacyTarget "test_node" */;
+			buildPhases = (
+			);
+			buildToolPath = scons;
+			buildWorkingDirectory = /Users/niklas/development/textile_display/modules/test_node;
+			dependencies = (
+			);
+			name = test_node;
+			passBuildSettingsInEnvironment = 1;
+			productName = ahrs;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		855A808B1302F7C600E9FB14 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 855A808E1302F7C600E9FB14 /* Build configuration list for PBXProject "textile display" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 855A80891302F7C600E9FB14;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				85D9B74C156C2B04001A2501 /* test_node */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		855A808C1302F7C600E9FB14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		855A808D1302F7C600E9FB14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+		85D9B74D156C2B04001A2501 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PATH = "/Library/Frameworks/Python.framework/Versions/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/local/bin:/opt/local/sbin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/Current/bin:/usr/sat/bin:/usr/local/sbin:/Users/niklas/.scripts:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/texbin:/usr/local/CrossPack-AVR/bin";
+				SCONSFLAGS = "-Q -j2 --site-dir=${XPCC_HOME}scons/";
+				XPCC_HOME = "$(XPCC_HOME)";
+			};
+			name = Debug;
+		};
+		85D9B74E156C2B04001A2501 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PATH = "/Library/Frameworks/Python.framework/Versions/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/local/bin:/opt/local/sbin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/Current/bin:/usr/sat/bin:/usr/local/sbin:/Users/niklas/.scripts:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/texbin:/usr/local/CrossPack-AVR/bin";
+				SCONSFLAGS = "-Q -j2 --site-dir=${XPCC_HOME}scons/";
+				XPCC_HOME = "$(XPCC_HOME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		855A808E1302F7C600E9FB14 /* Build configuration list for PBXProject "textile display" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				855A808C1302F7C600E9FB14 /* Debug */,
+				855A808D1302F7C600E9FB14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85D9B74F156C2B04001A2501 /* Build configuration list for PBXLegacyTarget "test_node" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85D9B74D156C2B04001A2501 /* Debug */,
+				85D9B74E156C2B04001A2501 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 855A808B1302F7C600E9FB14 /* Project object */;
+}
