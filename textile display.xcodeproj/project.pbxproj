@@ -39,6 +39,20 @@
 			passBuildSettingsInEnvironment = 1;
 			productName = ahrs;
 		};
+		85FE784C15DE2A6B0046A8F7 /* stm32_test */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "";
+			buildConfigurationList = 85FE784D15DE2A6B0046A8F7 /* Build configuration list for PBXLegacyTarget "stm32_test" */;
+			buildPhases = (
+			);
+			buildToolPath = scons;
+			buildWorkingDirectory = /Users/niklas/development/textile_display/modules/stm32_test;
+			dependencies = (
+			);
+			name = stm32_test;
+			passBuildSettingsInEnvironment = 1;
+			productName = ahrs;
+		};
 /* End PBXLegacyTarget section */
 
 /* Begin PBXProject section */
@@ -62,6 +76,7 @@
 			projectRoot = "";
 			targets = (
 				85D9B74C156C2B04001A2501 /* test_node */,
+				85FE784C15DE2A6B0046A8F7 /* stm32_test */,
 			);
 		};
 /* End PBXProject section */
@@ -99,6 +114,26 @@
 			};
 			name = Release;
 		};
+		85FE784E15DE2A6B0046A8F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PATH = "/Library/Frameworks/Python.framework/Versions/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/local/bin:/opt/local/sbin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/Current/bin:/usr/sat/bin:/usr/local/sbin:/Users/niklas/.scripts:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/texbin:/usr/local/CrossPack-AVR/bin";
+				PRODUCT_NAME = "test_node copy";
+				SCONSFLAGS = "-Q -j2 --site-dir=${XPCC_HOME}scons/";
+				XPCC_HOME = "$(XPCC_HOME)";
+			};
+			name = Debug;
+		};
+		85FE784F15DE2A6B0046A8F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PATH = "/Library/Frameworks/Python.framework/Versions/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/local/bin:/opt/local/sbin:/Library/Frameworks/Python.framework/Versions/2.6/bin:/Library/Frameworks/Python.framework/Versions/Current/bin:/usr/sat/bin:/usr/local/sbin:/Users/niklas/.scripts:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/texbin:/usr/local/CrossPack-AVR/bin";
+				PRODUCT_NAME = "test_node copy";
+				SCONSFLAGS = "-Q -j2 --site-dir=${XPCC_HOME}scons/";
+				XPCC_HOME = "$(XPCC_HOME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -116,6 +151,15 @@
 			buildConfigurations = (
 				85D9B74D156C2B04001A2501 /* Debug */,
 				85D9B74E156C2B04001A2501 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85FE784D15DE2A6B0046A8F7 /* Build configuration list for PBXLegacyTarget "stm32_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85FE784E15DE2A6B0046A8F7 /* Debug */,
+				85FE784F15DE2A6B0046A8F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

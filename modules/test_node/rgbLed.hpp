@@ -12,11 +12,11 @@
 #include "timer_led.hpp"
 #include "../common.hpp"
 
-class ColorController
+class RgbLed
 {
 public:
-	ColorController(volatile uint8_t* red, volatile uint8_t* green, volatile uint8_t* blue)
-	:	red(red), green(green), blue(blue)
+	RgbLed()
+	:	red(&OCR1AL), green(&OCR0A), blue(&OCR0B)
 	{
 		fadeToRgbColorValue(0, 0, 0, 0);
 	}
@@ -41,30 +41,21 @@ public:
 		red.run();
 		green.run();
 		blue.run();
+		
+		if (red.getBrightness() == 0) TCCR1A &= ~(1<<COM1A1);
+		else TCCR1A |= (1<<COM1A1);
+		
+		if (green.getBrightness() == 0) TCCR0A &= ~(1<<COM0A1);
+		else TCCR0A |= (1<<COM0A1);
+		
+		if (blue.getBrightness() == 0) TCCR0A &= ~(1<<COM0B1);
+		else TCCR0A |= (1<<COM0B1);
 	}
 	
 	inline bool
 	isFading()
 	{
 		return (red.isFading() || green.isFading() || blue.isFading());
-	}
-	
-	ALWAYS_INLINE bool
-	turnRedOff()
-	{
-		return (red.getBrightness() == 0);
-	}
-	
-	ALWAYS_INLINE bool
-	turnGreenOff()
-	{
-		return (green.getBrightness() == 0);
-	}
-	
-	ALWAYS_INLINE bool
-	turnBlueOff()
-	{
-		return (blue.getBrightness() == 0);
 	}
 	
 	RgbColor

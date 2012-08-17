@@ -29,14 +29,12 @@ xpcc::IOStream stream(device);
 #endif
 
 // COLORS #####################################################################
-#include "colorController.hpp"
-ColorController color(&OCR1AL, &OCR0A, &OCR0B);
+#include "rgbLed.hpp"
+RgbLed led;
 
 // PHOTOSENSITIVE DIODE #######################################################
-typedef xpcc::atmega::AdcInterrupt Adc;
-uint8_t adcMapping[1] = {3};
-typedef xpcc::atmega::AnalogSensors< Adc,1,4 > photoTransistor;
-uint16_t photoSensorData;
+typedef xpcc::atmega::Adc photo;
+uint16_t photoData;
 
 // INTERRUPTS #################################################################
 // SYNC line
@@ -104,17 +102,15 @@ MAIN_FUNCTION // FINALLY ######################################################
 	LIGHT_SENSOR::setInput();
 	
 	// set up the oversampling of the photosensitive diode
-	Adc::initialize(Adc::REFERENCE_AREF, Adc::PRESCALER_32);
-	photoTransistor::initialize(adcMapping, &photoSensorData);
+	photo::initialize(xpcc::atmega::Adc::REFERENCE_AREF, xpcc::atmega::Adc::PRESCALER_32);
+	photo::enableFreeRunningMode();
+	photo::startConversion(3);
 	
 	// init is done, full power, Skotty!
 	xpcc::atmega::enableInterrupts();
 	
 #if DEBUG
-	const uint16_t fadeTime = 3000;
-	const uint8_t table_size = 7;
-	uint8_t color_index = 0;
-	bool fadeOffNext = false;
+	const uint8_t table_size = 8;
 	RgbColor color_table[table_size] =
 	{
 		{255,0,0},
@@ -124,46 +120,20 @@ MAIN_FUNCTION // FINALLY ######################################################
 		{0,255,255},
 		{255,0,255},
 		{255,255,255},
+		{127,127,127},
 	};
 #endif
-//	xpcc::PeriodicTimer<> timer(50);
+	xpcc::PeriodicTimer<> timer(17);
 	
 	while (1)
 	{
 #if DEBUG
-//		if (photoTransistor::isNewDataAvailable())
-//		{
-//			RgbColor next = {0,0,photoSensorData>>1};
-//			if (photoSensorData > 255) next.blue = 255;
-//			color.fadeToRgbColor(0, next);
-//		}
-//		
-//		if (timer.isExpired())
-//		{
-//			photoTransistor::readSensors();
-//		}
-		
-		if (!color.isFading())
+		if (timer.isExpired())
 		{
-			if (fadeOffNext)
-			{
-				color.fadeToRgbColorValue(fadeTime, 0,0,0);
-			}
-			else {
-				color.fadeToRgbColor(fadeTime, color_table[color_index++ % table_size]);
-			}
-			fadeOffNext = !fadeOffNext;
+			uint8_t value = photo::getValue()>>2;
+			led.fadeToRgbColorValue(0, 0, 0, value);
 		}
 #endif
-		color.update();
-		
-		if (color.turnRedOff()) TCCR1A &= ~(1<<COM1A1);
-		else TCCR1A |= (1<<COM1A1);
-		
-		if (color.turnGreenOff()) TCCR0A &= ~(1<<COM0A1);
-		else TCCR0A |= (1<<COM0A1);
-			
-		if (color.turnBlueOff()) TCCR0A &= ~(1<<COM0B1);
-		else TCCR0A |= (1<<COM0B1);
+		led.update();
 	}
 }
