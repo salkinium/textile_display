@@ -1,5 +1,6 @@
 # hardware module build cache
 modules/build/
+textiles/png/
 
 # SCons noise
 .sconsign.dblite
@@ -51,3 +52,6 @@ xcuserdata
 *.out
 *.synctex.gz
 *.fdb_latexmk
+
+# Python noise
+*.pyc
