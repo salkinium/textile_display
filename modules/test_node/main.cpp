@@ -8,7 +8,7 @@ GPIO__IO(SENSOR3, C, 2);			// ADC2
 GPIO__INPUT(LIGHT_SENSOR, C, 3);	// ADC3
 
 GPIO__INPUT(SYNC, D, 2);			// INT0
-GPIO__IO(EVENT, D, 7);				// INT1
+GPIO__IO(EVENT, D, 3);				// INT1
 
 GPIO__OUTPUT(RED, B, 1);			// OCR1AL
 GPIO__OUTPUT(GREEN, D, 6);			// OCR0A
@@ -24,45 +24,54 @@ uint8_t adcMap[1] = {3};
 typedef xpcc::atmega::AnalogSensors< Adc,1,3 > photo;
 uint16_t photoData;
 
-#define DEBUG 0
-
 // COMMUNICATION ##############################################################
 typedef xpcc::atmega::BufferedUart0 primaryUart;
-primaryUart uart(38400);
+primaryUart uart(500000);
 
-#if DEBUG
-#include <xpcc/io/iodevice_wrapper.hpp>
-#include <xpcc/io/iostream.hpp>
-xpcc::IODeviceWrapper< primaryUart > device(uart);
-xpcc::IOStream stream(device);
-#else
+//#include <xpcc/io/iodevice_wrapper.hpp>
+//#include <xpcc/io/iostream.hpp>
+//xpcc::IODeviceWrapper< primaryUart > device(uart);
+//xpcc::IOStream stream(device);
+
+#include <avr/eeprom.h>
+uint8_t volatileGroupPixel;
+FadingColor colorBuffer;
+
 #include <xpcc/driver/connectivity/rpr.hpp>
 
 class Communicator : public xpcc::rpr::Callable
 {
 public:
 	void
-	setColor(xpcc::rpr::Transmitter& node, xpcc::rpr::Message *message)
+	setColor(xpcc::rpr::Transmitter& /*node*/, xpcc::rpr::Message *message)
 	{
-		FadingColor *fade = reinterpret_cast<FadingColor *>(message->payload);
-		led.fadeToRgbColorValue(fade->time, fade->color.red, fade->color.green, fade->color.blue);
-		
-		if (message->type == xpcc::rpr::MESSAGE_TYPE_UNICAST)
-			node.unicastMessage(message->source, common::command::CONFIRMATION, 0, 0);
+		colorBuffer = *reinterpret_cast<FadingColor *>(message->payload);
+	}
+	
+	void
+	setGroupColor(xpcc::rpr::Transmitter& /*node*/, xpcc::rpr::Message *message)
+	{
+		colorBuffer.time = 10;
+		colorBuffer.color.red = *(message->payload + volatileGroupPixel*3);
+		colorBuffer.color.green = *(message->payload + volatileGroupPixel*3 + 1);
+		colorBuffer.color.blue = *(message->payload + volatileGroupPixel*3 + 2);
 	}
 };
 Communicator comm;
 
 FLASH_STORAGE(xpcc::rpr::Listener listenList[]) =
 {
-	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_UNICAST, xpcc::rpr::ADDRESS_ANY, xpcc::rpr::COMMAND_ANY, comm, Communicator::setColor),
-	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_MULTICAST, xpcc::rpr::ADDRESS_ANY, xpcc::rpr::COMMAND_ANY, comm, Communicator::setColor),
+	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_UNICAST, xpcc::rpr::ADDRESS_ANY, common::command::SET_COLOR, comm, Communicator::setColor),
+	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_MULTICAST, xpcc::rpr::ADDRESS_ANY, common::command::SET_COLOR, comm, Communicator::setGroupColor),
 };
 
 xpcc::rpr::Node< xpcc::rpr::Interface< primaryUart > >
 rprNode(xpcc::accessor::asFlash(listenList),
 		sizeof(listenList) / sizeof(xpcc::rpr::Listener));
-#endif
+// if you change the order of the pointers, you will have to program the eeprom again.
+uint16_t EEMEM NonVolatileAddress;
+uint16_t EEMEM NonVolatileGroupAddress;
+uint8_t EEMEM NonVolatileGroupPixel;
 
 // INTERRUPTS #################################################################
 // SYNC line
@@ -74,7 +83,7 @@ ISR(INT0_vect)
 // EVENT line
 ISR(INT1_vect)
 {
-	// update colors now
+	led.fadeToRgbColorValue(colorBuffer.time, colorBuffer.color.red, colorBuffer.color.green, colorBuffer.color.blue);
 }
 
 #include <xpcc/architecture/driver.hpp>
@@ -95,14 +104,16 @@ MAIN_FUNCTION // FINALLY ######################################################
 	
 	// enable external interrupts on INT0 and INT1 pins
 	EIMSK = (1<<INT0)|(1<<INT1);
-	// sensing control on any (SYNC), falling (EVENT) edge of signal
-	EICRA = (1<<ISC00)|(1<<ISC11);
+	// sensing control on any (SYNC), any (EVENT) edge of signal
+	EICRA = (1<<ISC00)|(1<<ISC10);
 	
 	// turn off all LEDs
 	BLUE::setOutput(xpcc::gpio::LOW);
 	RED::setOutput(xpcc::gpio::LOW);
 	GREEN::setOutput(xpcc::gpio::LOW);
 	
+	SYNC::setInput();
+	EVENT::setInput();
 	SENSOR1::setInput();
 	SENSOR2::setInput();
 	SENSOR3::setInput();
@@ -115,46 +126,13 @@ MAIN_FUNCTION // FINALLY ######################################################
 	// init is done, full power, Skotty!
 	xpcc::atmega::enableInterrupts();
 	
-#if DEBUG
-	const uint8_t table_size = 8;
-	RgbColor color_table[table_size] =
-	{
-		{255,0,0},
-		{0,255,0},
-		{0,0,255},
-		{255,255,0},
-		{0,255,255},
-		{255,0,255},
-		{255,255,255},
-		{127,127,127},
-	};
-	
-	stream << "RESTART" << xpcc::endl;
-#else
-	rprNode.setAddress(common::id::PIXEL1, common::group::GROUP1);
-//	uint8_t buffer[20] = "1 Eurojob und mehr.";
-#endif
-	xpcc::PeriodicTimer<> timer(17);
-	xpcc::PeriodicTimer<> timer3(5000);
-	xpcc::PeriodicTimer<> timer2(7000);
+	volatileGroupPixel = eeprom_read_byte(&NonVolatileGroupPixel);
+	rprNode.setAddress(eeprom_read_word(&NonVolatileAddress), eeprom_read_word(&NonVolatileGroupAddress));
 	
 	while (1)
 	{
-#if DEBUG
-		if (photo::isNewDataAvailable())
-		{
-			uint8_t value = *photo::getData()>>2;
-			led.fadeToRgbColorValue(15, 0, 0, value);
-		}
-
-		
-		if (timer.isExpired())
-		{
-			photo::readSensors();
-		}
-#else
 		rprNode.update();
-#endif
+		
 		led.update();
 	}
 }

@@ -5,11 +5,12 @@
 GPIO__OUTPUT(LED, A, 8);
 GPIO__INPUT(Button, C, 13);
 GPIO__OUTPUT(SYNC, D, 15);
+GPIO__OUTPUT(EVENT, D, 14);
 
 using namespace xpcc::stm32;
 
-xpcc::stm32::BufferedUsart1 rprUart(38400, 1);
-xpcc::stm32::BufferedUsart2 loggerUart(115200, 5);
+xpcc::stm32::BufferedUsart1 rprUart(500000, 1);
+xpcc::stm32::BufferedUsart2 loggerUart(230400, 5);
 
 #include <xpcc/debug/logger.hpp>
 xpcc::IODeviceWrapper<xpcc::stm32::BufferedUsart2> loggerDevice(loggerUart);
@@ -35,18 +36,16 @@ void tick()
 	SYNC::toggle();
 }
 
-uint8_t buffer[20] = "1 Eurojob und mehr.";
-
-#define XPCC_RPR_DEBUG 0
+//#define XPCC_RPR_DEBUG 1
 #include <xpcc/driver/connectivity/rpr.hpp>
 
 class Communicator : public xpcc::rpr::Callable
 {
 public:
 	void
-	anyMessage(xpcc::rpr::Transmitter& /*node*/, xpcc::rpr::Message *message)
+	anyMessage(xpcc::rpr::Transmitter& /*node*/, xpcc::rpr::Message */*message*/)
 	{
-		XPCC_LOG_DEBUG << "message received, command=" << xpcc::hex << message->command << xpcc::ascii << xpcc::endl;
+		XPCC_LOG_DEBUG << ".";
 	}
 };
 
@@ -62,8 +61,7 @@ rprNode(xpcc::accessor::asFlash(listenList),
 		  sizeof(listenList) / sizeof(xpcc::rpr::Listener));
 
 #include <xpcc/workflow.hpp>
-xpcc::PeriodicTimer<> timer(210);
-xpcc::PeriodicTimer<> timer2(7000);
+xpcc::PeriodicTimer<> timer(16);
 
 MAIN_FUNCTION
 {
@@ -79,10 +77,11 @@ MAIN_FUNCTION
 	Button::setInput(xpcc::stm32::PULLUP);
 	LED::setOutput(xpcc::gpio::HIGH);
 	SYNC::setOutput();
+	EVENT::setOutput();
 	
 	rprNode.setAddress(common::id::CONTROL, common::group::GROUP0);
 	FadingColor fade;
-	fade.time = 200;
+	fade.time = 10;
 	fade.color.red = 0;
 	fade.color.green = 0;
 	fade.color.blue = 0;
@@ -93,33 +92,58 @@ MAIN_FUNCTION
 		
 		if (timer.isExpired())
 		{
-			fade.color.red   += 10;
-			fade.color.green += 5;
-			fade.color.blue  += 2;
-			rprNode.unicastMessage(common::id::PIXEL1, common::command::SET_COLOR, &fade, 5);
-//			rprNode.multicastMessage(common::group::GROUP1, common::command::SET_COLOR, &fade, 5);
-			fade.color.red   += 10;
-			fade.color.green += 5;
-			fade.color.blue  += 2;
-			rprNode.unicastMessage(common::id::PIXEL2, common::command::SET_COLOR, &fade, 5);
-			fade.color.red   += 10;
-			fade.color.green += 5;
-			fade.color.blue  += 2;
-			rprNode.unicastMessage(common::id::PIXEL3, common::command::SET_COLOR, &fade, 5);
-			fade.color.red   += 10;
-			fade.color.green += 5;
-			fade.color.blue  += 2;
-			rprNode.unicastMessage(common::id::PIXEL4, common::command::SET_COLOR, &fade, 5);
-			fade.color.red   += 10;
-			fade.color.green += 5;
-			fade.color.blue  += 2;
-			rprNode.unicastMessage(common::id::PIXEL5, common::command::SET_COLOR, &fade, 5);
+			EVENT::toggle();
+			
+			fade.color.red   -= 1;
+			fade.color.green -= 1;
+			fade.color.blue  -= 1;
+			
+			uint8_t buffer[20];
+			// PIXEL1
+			buffer[0] = fade.color.red,
+			buffer[1] = fade.color.green,
+			buffer[2] = fade.color.blue,
+			// PIXEL2
+			buffer[3] = fade.color.red + 10,
+			buffer[4] = fade.color.green + 10,
+			buffer[5] = fade.color.blue + 10,
+			// PIXEL3
+			buffer[6] = fade.color.red + 20,
+			buffer[7] = fade.color.green + 20,
+			buffer[8] = fade.color.blue + 20,
+			// PIXEL4
+			buffer[9] = fade.color.red + 30,
+			buffer[10] = fade.color.green + 30,
+			buffer[11] = fade.color.blue + 30,
+			// PIXEL5
+			buffer[12] = fade.color.red + 40,
+			buffer[13] = fade.color.green + 40,
+			buffer[14] = fade.color.blue + 40,
+			rprNode.multicastMessage(common::group::GROUP1, common::command::SET_COLOR, &buffer, 15);
+			
+//			static FadingColor fadeTransmit;
+//			fadeTransmit.time = 10;
+//			fadeTransmit.color.red   = fade.color.red;
+//			fadeTransmit.color.green = fade.color.green;
+//			fadeTransmit.color.blue  = fade.color.blue;
+//			rprNode.unicastMessage(common::id::PIXEL5, common::command::SET_COLOR, &fadeTransmit, 5);
+//			fadeTransmit.color.red   += 10;
+//			fadeTransmit.color.green += 10;
+//			fadeTransmit.color.blue  += 10;
+//			rprNode.unicastMessage(common::id::PIXEL4, common::command::SET_COLOR, &fadeTransmit, 5);
+//			fadeTransmit.color.red   += 10;
+//			fadeTransmit.color.green += 10;
+//			fadeTransmit.color.blue  += 10;
+//			rprNode.unicastMessage(common::id::PIXEL3, common::command::SET_COLOR, &fadeTransmit, 5);
+//			fadeTransmit.color.red   += 10;
+//			fadeTransmit.color.green += 10;
+//			fadeTransmit.color.blue  += 10;
+//			rprNode.unicastMessage(common::id::PIXEL2, common::command::SET_COLOR, &fadeTransmit, 5);
+//			fadeTransmit.color.red   += 10;
+//			fadeTransmit.color.green += 10;
+//			fadeTransmit.color.blue  += 10;
+//			rprNode.unicastMessage(common::id::PIXEL1, common::command::SET_COLOR, &fadeTransmit, 5);
 		}
-
-//		if (timer2.isExpired())
-//		{
-//			rprNode.broadcastMessage('C', buffer, 19);
-//		}
 	}
 }
 
