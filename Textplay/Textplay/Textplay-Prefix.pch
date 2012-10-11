@@ -1,0 +1,54 @@
+//
+// Prefix header for all source files of the 'Textplay' target in the 'Textplay' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_4_0
+#	warning "This project uses features only available in iOS SDK 4.0 and later."
+#endif
+
+#ifdef __OBJC__
+#	import <UIKit/UIKit.h>
+#	import <Foundation/Foundation.h>
+#	import "CALayer+Init.h"
+#	import "UIColor-Expanded.h"
+#endif
+
+#define LAYER_DEBUG_BORDER 0
+#define DEBUG_UNMASK_TO_BOUNDS 0
+
+// my own
+#define checkNanInfNegative(float, nanCase, infCase, negative) \
+(float = isnan(float) ? nanCase : float, \
+float = isinf(float) ? copysign(infCase, float) : float, \
+float = (float < 0) ? negative : float)
+
+#define checkNanInfRange(float, nanCase, infCase, minimum, maximum) \
+(float = isnan(float) ? nanCase : float, \
+float = isinf(float) ? copysign(infCase, float) : float, \
+float = (float > maximum) ? maximum : float, \
+float = (float < minimum) ? minimum : float)
+
+#define checkNanInf(float, nanCase, infCase) \
+(float = isnan(float) ? nanCase : float, \
+float = isinf(float) ? copysign(infCase, float) : float)
+
+#define CGPointMakeMidRect(rect) \
+CGPointMake(rect.size.width/2, rect.size.height/2)
+
+#define CGPointMakeHalf CGPointMake(0.5, 0.5)
+
+// https://gist.github.com/1057420
+#define DEFINE_SHARED_INSTANCE_USING_BLOCK(block) \
+	static dispatch_once_t pred = 0; \
+	__strong static id _sharedObject = nil; \
+	dispatch_once(&pred, ^{ \
+		_sharedObject = block(); \
+	}); \
+	return _sharedObject; \
+
+// http://www.dribin.org/dave/blog/archives/2008/09/24/proper_kvo_usage/
+#define DDDefineContext(_X_) static void * _X_ = @#_X_
+
+
