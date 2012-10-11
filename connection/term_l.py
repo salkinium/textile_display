@@ -4,17 +4,18 @@ import math
 import cairo
 import os
 
-width, height = 25, 25
+size = 25
+WIDTH, HEIGHT = 72/25.4*size, 72/25.4*size
 scale = 1
 
 def makeLeftTermination(lower):
 	string = 'term_l'
 	if (lower):
 		string += '_l'
-	surface = cairo.SVGSurface ('elements/'+string+'.svg', 72.0/25.4*width*scale, 72.0/25.4*height*scale)
+	surface = cairo.SVGSurface ('elements/'+string+'.svg', WIDTH, HEIGHT)
 	print 'generating elements/'+string
 	ctx = cairo.Context (surface)
-	ctx.scale (72.0/25.4*width*scale, 72.0/25.4*height*scale)
+	ctx.scale (WIDTH, HEIGHT)
 
 	# white background
 	ctx.rectangle (0, 0, 1, 1)
@@ -23,31 +24,35 @@ def makeLeftTermination(lower):
 
 	delta = 1.0/6
 
+	# +     |
+	#      3|
+	#      2|
+	# O  1  |
+	# ------
+	point0 = 0, 08.4938/size
+	point1 = 5.08/size, 8.4938/size
+	point2 = 8.3312/size, 3.75/size*1.5
+	point3 = 8.3312/size, 3.75/size*0.5
+
 	# VCC line
-	ctx.move_to (delta*4.5, 0)
-	ctx.line_to (delta*4.5, delta*1.5)
+	ctx.move_to (delta*4, 0)
+	ctx.line_to (delta*4, 0.5-point2[1])
+	# if not lower:
+	# 	ctx.move_to (delta*4, 0.5-point2[1])
+	ctx.line_to (1, 0.5-point2[1])
 	if not lower:
-		ctx.move_to (delta*4, delta*1.5)
-	ctx.line_to (1, delta*1.5)
-	if not lower:
-		ctx.move_to (delta*4.5, delta*1.5)
-		ctx.line_to (delta*4.5, 1)
+		ctx.move_to (delta*4, 0.5-point2[1])
+		ctx.line_to (delta*4, 1)
 
 	# GND line
-	ctx.move_to (delta*3.5, 0)
-	ctx.line_to (delta*3.5, delta*2.5)
+	ctx.move_to (delta*2, 0)
+	ctx.line_to (delta*2, 0.5-point3[1])
+	# if not lower:
+	# 	ctx.move_to (delta*3, 0.5-point3[1])
+	ctx.line_to (1, 0.5-point3[1])
 	if not lower:
-		ctx.move_to (delta*3, delta*2.5)
-	ctx.line_to (1, delta*2.5)
-	if not lower:
-		ctx.move_to (delta*3.5, delta*2.5)
-		ctx.line_to (delta*3.5, 1)
-
-	ctx.set_source_rgb (0, 0, 0)
-	ctx.set_line_width (0.05)
-	ctx.set_line_cap (cairo.LINE_CAP_ROUND)
-	ctx.set_line_join (cairo.LINE_JOIN_ROUND)
-	ctx.stroke ()
+		ctx.move_to (delta*2, 0.5-point3[1])
+		ctx.line_to (delta*2, 1)
 
 	# RX line
 	ctx.move_to (1, delta*0.5)
@@ -55,37 +60,40 @@ def makeLeftTermination(lower):
 	ctx.line_to (delta*5.5, 0)
 
 	# TX line
-	ctx.move_to (delta*2.5, 0)
+	ctx.move_to (delta*0.5, 0)
 	if not lower:
-		ctx.line_to (delta*2.5, 1)
-		ctx.move_to (1, delta*3.5)
-		ctx.line_to (delta*5.5, delta*3.5)
+		ctx.line_to (delta*0.5, 1)
+		ctx.move_to (1, 0.5+point3[1])
+		ctx.line_to (delta*5.5, 0.5+point3[1])
 		ctx.line_to (delta*5.5, 1)
 	else:
-		ctx.line_to (delta*2.5, delta*3.5)
-		ctx.line_to (1, delta*3.5)
+		ctx.line_to (delta*0.5, 0.5+point3[1])
+		ctx.line_to (1, 0.5+point3[1])
 
-	# SYNC line
-	ctx.move_to (delta*1.5, 0)
-	ctx.line_to (delta*1.5, delta*4.5)
-	if not lower:
-		ctx.move_to (delta*1, delta*4.5)
-	ctx.line_to (1, delta*4.5)
-	if not lower:
-		ctx.move_to (delta*1.5, delta*4.5)
-		ctx.line_to (delta*1.5, 1)
+	# # SYNC line
+	# ctx.move_to (delta*1.5, 0)
+	# ctx.line_to (delta*1.5, delta*4.5)
+	# if not lower:
+	# 	ctx.move_to (delta*1, delta*4.5)
+	# ctx.line_to (1, delta*4.5)
+	# if not lower:
+	# 	ctx.move_to (delta*1.5, delta*4.5)
+	# 	ctx.line_to (delta*1.5, 1)
 
-	# EVENT line
-	ctx.move_to (delta*0.5, 0)
-	ctx.line_to (delta*0.5, delta*5.5)
-	if not lower:
-		ctx.move_to (delta*0, delta*5.5)
-	ctx.line_to (1, delta*5.5)
-	if not lower:
-		ctx.move_to (delta*0.5, delta*5.5)
-		ctx.line_to (delta*0.5, 1)
+	# # EVENT line
+	# ctx.move_to (delta*0.5, 0)
+	# ctx.line_to (delta*0.5, delta*5.5)
+	# if not lower:
+	# 	ctx.move_to (delta*0, delta*5.5)
+	# ctx.line_to (1, delta*5.5)
+	# if not lower:
+	# 	ctx.move_to (delta*0.5, delta*5.5)
+	# 	ctx.line_to (delta*0.5, 1)
 
+	ctx.set_source_rgb (0, 0, 0)
 	ctx.set_line_width (0.02)
+	ctx.set_line_cap (cairo.LINE_CAP_ROUND)
+	ctx.set_line_join (cairo.LINE_JOIN_ROUND)
 	ctx.stroke ()
 
 	surface.finish ()

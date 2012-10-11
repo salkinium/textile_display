@@ -34,62 +34,68 @@ def makeTile(right):
 	delta = 1.0/6
 
 	# VCC line
-	ctx.move_to (0, delta*1.5)
+	ctx.move_to (0, 0.5-point2[1])
 	ctx.line_to (0.5-point2[0], 0.5-point2[1])
 	if not right:
-		ctx.move_to (1, delta*1.5)
+		ctx.move_to (1, 0.5-point2[1])
 		ctx.line_to (0.5+point2[0], 0.5-point2[1])
 
 	# GND line
-	ctx.move_to (0, delta*2.5)
+	ctx.move_to (0, 0.5-point3[1])
 	ctx.line_to (0.5-point3[0], 0.5-point3[1])
 	if not right:
-		ctx.move_to (1, delta*2.5)
+		ctx.move_to (1, 0.5-point3[1])
 		ctx.line_to (0.5+point3[0], 0.5-point3[1])
 
-	ctx.set_source_rgb (0, 0, 0)
-	ctx.set_line_width (0.05)
-	ctx.set_line_cap (cairo.LINE_CAP_ROUND)
-	ctx.set_line_join (cairo.LINE_JOIN_ROUND)
-	ctx.stroke ()
+	# Spacing line for GND signal
+	if right:
+		ctx.move_to (0.5+point2[0], 0.5-point2[1])
+		ctx.line_to (0.5+point2[0], 0.5-point3[1])	
 
 	# Lower LOOP BACK line
 	ctx.move_to (0, delta*0.5)
 	ctx.line_to (1, delta*0.5)
 	if right:
-		ctx.line_to (1, delta*3.5)
+		ctx.line_to (1, 0.5+point3[1])
 
 	# RX line
-	ctx.move_to (0, delta*3.5)
+	ctx.move_to (0, 0.5+point3[1])
 	ctx.line_to (0.5-point3[0], 0.5+point3[1])
 	ctx.line_to (0.5+point3[0], 0.5+point3[1])
 
 	# TX line
-	ctx.move_to (1, delta*3.5)
+	ctx.move_to (1, 0.5+point3[1])
 	ctx.line_to (0.5+point2[0], 0.5+point2[1])
 
-	# SYNC line
-	ctx.move_to (0, delta*4.5)
-	ctx.line_to (0.5-point2[0], 0.5+point2[1])
-	if not right:
-		ctx.line_to (0.42-point2[0], 0.4+point2[1])
-		ctx.line_to (0.58-point2[0], 0.4+point2[1])
-		ctx.line_to (0.5-point2[0], 0.5+point2[1])
-		ctx.line_to (0.5, delta*4.5)
-		ctx.line_to (0.5+point2[0], 0.5+point2[1]*1.25)
-		ctx.line_to (1, delta*4.5)
+	# Spacing line for RX/TX signal
+	ctx.move_to (0.2, 0.7)
+	ctx.line_to (0.4, 0.8)
 
-	# EVENT line
-	ctx.move_to (0, delta*5.5)
-	ctx.line_to (0.5, delta*5.5)
-	ctx.line_to (0.5+point1[0], 0.5+point1[1])
-	if not right:
-		ctx.line_to (0.42+point1[0], 0.6+point1[1])
-		ctx.line_to (0.58+point1[0], 0.6+point1[1])
-		ctx.line_to (0.5+point1[0], 0.5+point1[1])
-		ctx.line_to (1, delta*5.5)
+	# # SYNC line
+	# ctx.move_to (0, delta*4.5)
+	# ctx.line_to (0.5-point2[0], 0.5+point2[1])
+	# if not right:
+	# 	ctx.line_to (0.42-point2[0], 0.4+point2[1])
+	# 	ctx.line_to (0.58-point2[0], 0.4+point2[1])
+	# 	ctx.line_to (0.5-point2[0], 0.5+point2[1])
+	# 	ctx.line_to (0.5, delta*4.5)
+	# 	ctx.line_to (0.5+point2[0], 0.5+point2[1]*1.25)
+	# 	ctx.line_to (1, delta*4.5)
 
+	# # EVENT line
+	# ctx.move_to (0, delta*5.5)
+	# ctx.line_to (0.5, delta*5.5)
+	# ctx.line_to (0.5+point1[0], 0.5+point1[1])
+	# if not right:
+	# 	ctx.line_to (0.42+point1[0], 0.6+point1[1])
+	# 	ctx.line_to (0.58+point1[0], 0.6+point1[1])
+	# 	ctx.line_to (0.5+point1[0], 0.5+point1[1])
+	# 	ctx.line_to (1, delta*5.5)
+
+	ctx.set_source_rgb (0, 0, 0)
 	ctx.set_line_width (0.02)
+	ctx.set_line_cap (cairo.LINE_CAP_ROUND)
+	ctx.set_line_join (cairo.LINE_JOIN_ROUND)
 	ctx.stroke ()
 
 	surface.finish ()
