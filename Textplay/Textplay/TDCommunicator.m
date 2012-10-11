@@ -57,7 +57,7 @@ typedef enum
 		dispatch_queue_t mainQueue = dispatch_get_main_queue();
 		_asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:mainQueue];
 		
-		[self attemptToConnect];
+//		[self attemptToConnect];
 	}
 	return self;
 }

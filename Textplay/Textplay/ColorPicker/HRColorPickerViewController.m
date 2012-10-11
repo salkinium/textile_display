@@ -26,7 +26,6 @@
  */
 
 #import "HRColorPickerViewController.h"
-#import "HRColorPickerView.h"
 
 @implementation HRColorPickerViewController
 
@@ -92,6 +91,7 @@
     
     colorPickerView = [[HRColorPickerView alloc] initWithStyle:style defaultColor:rgbColor];
 	colorPickerView.backgroundColor = [UIColor blackColor];
+	colorPickerView.delegate = self;
     
     [self.view addSubview:colorPickerView];
     
@@ -141,6 +141,12 @@
 - (void)cancel:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)colorWasChanged:(HRColorPickerView *)color_picker_view;
+{
+	HRRGBColor rgbColor = [colorPickerView RGBColor];
+	[self.delegate setSelectedColor:[UIColor colorWithRed:rgbColor.r green:rgbColor.g blue:rgbColor.b alpha:1.0f]];
 }
 
 

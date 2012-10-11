@@ -169,8 +169,8 @@
         
         _timeInterval15fps.tv_sec = 0.0;
         _timeInterval15fps.tv_usec = 1000000.0/15.0;
-        
-        _delegateHasSELColorWasChanged = FALSE;
+
+        _delegateHasSELColorWasChanged = YES;
     }
     return self;
 }
@@ -308,7 +308,7 @@
         _lastDrawTime = now;
         [self setNeedsDisplay];
         if (_delegateHasSELColorWasChanged) {
-            [delegate colorWasChanged:self];
+            [self.delegate colorWasChanged:self];
         }
     }else{
         return;
@@ -373,12 +373,12 @@
     //
     /////////////////////////////////////////////////////////////////////////////
     
-    CGContextSaveGState(context);
-    
-    [[UIColor colorWithWhite:0.9f alpha:1.0f] set];
-    CGContextAddRect(context, _colorMapSideFrame);
-    CGContextDrawPath(context, kCGPathStroke);
-    CGContextRestoreGState(context);
+//    CGContextSaveGState(context);
+//    
+//    [[UIColor colorWithWhite:0.9f alpha:1.0f] set];
+//    CGContextAddRect(context, _colorMapSideFrame);
+//    CGContextDrawPath(context, kCGPathStroke);
+//    CGContextRestoreGState(context);
     
     CGContextSaveGState(context);
     float height;
@@ -392,7 +392,9 @@
         float pixelY = (float)j/(pixelCountY-1); // Y(彩度)は0.0f~1.0f
         for (int i = 0; i < pixelCountX; ++i) {
             float pixelX = (float)i/pixelCountX; // X(色相)は1.0f=0.0fなので0.0f~0.95fの値をとるように
-            HSVColorAt(&pixelHsv, pixelX, pixelY, _saturationUpperLimit, _currentHsvColor.v);
+			HRHSVColor bufferedHsvColor = _currentHsvColor;
+			bufferedHsvColor.v = 1.0f;
+            HSVColorAt(&pixelHsv, pixelX, pixelY, _saturationUpperLimit, bufferedHsvColor.v);
             RGBColorFromHSVColor(&pixelHsv, &pixelRgb);
             CGContextSetRGBFillColor(context, pixelRgb.r, pixelRgb.g, pixelRgb.b, 1.0f);
             CGContextFillRect(context, CGRectMake(_tileSize*i+_colorMapFrame.origin.x, height, _tileSize-2.0f, _tileSize-2.0f));

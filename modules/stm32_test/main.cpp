@@ -127,7 +127,7 @@ MAIN_FUNCTION
 			buffer[12] = fade.color.red + 40,
 			buffer[13] = fade.color.green + 40,
 			buffer[14] = fade.color.blue + 40,
-			rprNode.multicastMessage(common::group::GROUP0, common::command::SET_COLOR, &buffer, 48);
+			rprNode.multicastMessage(common::group::GROUP0, common::command::SET_COLOR, buffer, 48);
 			rprNode.broadcastMessage(common::command::SWAP_COLOR, 0, 0);
 			
 //			static FadingColor fadeTransmit;

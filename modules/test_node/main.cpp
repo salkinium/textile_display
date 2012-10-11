@@ -62,6 +62,13 @@ public:
 	{
 		led.fadeToRgbColorValue(colorBuffer.time, colorBuffer.color.red, colorBuffer.color.green, colorBuffer.color.blue);
 	}
+	
+	void
+	getID(xpcc::rpr::Transmitter& node, xpcc::rpr::Message *message)
+	{
+		uint8_t buffer[4] = {8,8,16,volatileGroupPixel};
+		node.unicastMessage(message->source, common::command::ANSWER_ID, buffer, 4);
+	}
 };
 Communicator comm;
 
@@ -70,6 +77,7 @@ FLASH_STORAGE(xpcc::rpr::Listener listenList[]) =
 	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_UNICAST, xpcc::rpr::ADDRESS_ANY, common::command::SET_COLOR, comm, Communicator::setColor),
 	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_MULTICAST, xpcc::rpr::ADDRESS_ANY, common::command::SET_COLOR, comm, Communicator::setGroupColor),
 	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_BROADCAST, xpcc::rpr::ADDRESS_ANY, common::command::SWAP_COLOR, comm, Communicator::swapColorBuffer),
+	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_UNICAST, xpcc::rpr::ADDRESS_ANY, common::command::REQUEST_ID, comm, Communicator::getID),
 };
 
 xpcc::rpr::Node< xpcc::rpr::Interface< primaryUart > >
@@ -126,11 +134,10 @@ MAIN_FUNCTION // FINALLY ######################################################
 //	Adc::initialize(xpcc::atmega::Adc::REFERENCE_AREF, xpcc::atmega::Adc::PRESCALER_32);
 //	photo::initialize(adcMap, &photoData);
 	
-	// init is done, full power, Skotty!
-	xpcc::atmega::enableInterrupts();
-	
 	volatileGroupPixel = eeprom_read_byte(&NonVolatileGroupPixel);
 	rprNode.setAddress(eeprom_read_word(&NonVolatileAddress), eeprom_read_word(&NonVolatileGroupAddress));
+	
+	xpcc::atmega::enableInterrupts();
 	
 	while (1)
 	{

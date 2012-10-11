@@ -68,6 +68,7 @@
 							<int key="IBUIReturnKeyType">9</int>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
+						<int key="IBUIClearButtonMode">1</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="76867118">
 							<int key="type">2</int>
 							<double key="pointSize">16</double>
@@ -264,6 +265,7 @@
 						<string key="NSFrame">{{206, 129}, {94, 27}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>

@@ -37,6 +37,8 @@ namespace common
 		enum control
 		{
 			CONFIRMATION = 0xfb,
+			REQUEST_ID = 'I',
+			ANSWER_ID = 'J',
 		};
 	}
 	
