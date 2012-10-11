@@ -10,12 +10,7 @@ namespace common
 	{
 		enum module
 		{
-			PIXEL1 = 0x1262,
-			PIXEL2 = 0x1258,
-			PIXEL3 = 0x1276,
-			PIXEL4 = 0x12ab,
-			PIXEL5 = 0x12fd,
-			CONTROL = 0x1234,
+			CONTROL = 0x12ff,
 		};
 	}
 	
@@ -25,6 +20,9 @@ namespace common
 		{
 			GROUP0 = 0x1200,
 			GROUP1 = 0x1201,
+			GROUP2 = 0x1202,
+			GROUP3 = 0x1203,
+			CONTROL = 0x12ff,
 		};
 	}
 	
@@ -33,6 +31,7 @@ namespace common
 		enum color
 		{
 			SET_COLOR = 'L',
+			SWAP_COLOR = 'S',
 		};
 		
 		enum control

@@ -56,6 +56,12 @@ public:
 		colorBuffer.color.green = *(message->payload + volatileGroupPixel*3 + 1);
 		colorBuffer.color.blue = *(message->payload + volatileGroupPixel*3 + 2);
 	}
+	
+	void
+	swapColorBuffer(xpcc::rpr::Transmitter& /*node*/, xpcc::rpr::Message */*message*/)
+	{
+		led.fadeToRgbColorValue(colorBuffer.time, colorBuffer.color.red, colorBuffer.color.green, colorBuffer.color.blue);
+	}
 };
 Communicator comm;
 
@@ -63,27 +69,22 @@ FLASH_STORAGE(xpcc::rpr::Listener listenList[]) =
 {
 	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_UNICAST, xpcc::rpr::ADDRESS_ANY, common::command::SET_COLOR, comm, Communicator::setColor),
 	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_MULTICAST, xpcc::rpr::ADDRESS_ANY, common::command::SET_COLOR, comm, Communicator::setGroupColor),
+	RPR__LISTEN(xpcc::rpr::MESSAGE_TYPE_BROADCAST, xpcc::rpr::ADDRESS_ANY, common::command::SWAP_COLOR, comm, Communicator::swapColorBuffer),
 };
 
 xpcc::rpr::Node< xpcc::rpr::Interface< primaryUart > >
 rprNode(xpcc::accessor::asFlash(listenList),
 		sizeof(listenList) / sizeof(xpcc::rpr::Listener));
 // if you change the order of the pointers, you will have to program the eeprom again.
-uint16_t EEMEM NonVolatileAddress;
-uint16_t EEMEM NonVolatileGroupAddress;
-uint8_t EEMEM NonVolatileGroupPixel;
+uint16_t EEMEM NonVolatileAddress = 0x1200;
+uint16_t EEMEM NonVolatileGroupAddress = common::group::GROUP0;
+uint8_t EEMEM NonVolatileGroupPixel = 0;
 
 // INTERRUPTS #################################################################
 // SYNC line
-ISR(INT0_vect)
+ISR(TIMER2_COMPA_vect)
 {
 	xpcc::Clock::increment();
-}
-
-// EVENT line
-ISR(INT1_vect)
-{
-	led.fadeToRgbColorValue(colorBuffer.time, colorBuffer.color.red, colorBuffer.color.green, colorBuffer.color.blue);
 }
 
 #include <xpcc/architecture/driver.hpp>
@@ -102,26 +103,28 @@ MAIN_FUNCTION // FINALLY ######################################################
 	// 8000kHz / 8 / 255 = 3.92kHz ~ 0.255ms
 	TCCR1B = (1<<WGM12)|(1<<CS11);
 	
-	// enable external interrupts on INT0 and INT1 pins
-	EIMSK = (1<<INT0)|(1<<INT1);
-	// sensing control on any (SYNC), any (EVENT) edge of signal
-	EICRA = (1<<ISC00)|(1<<ISC10);
+	// CTC mode on timer 2
+	TCCR2A = (1<<WGM21);
+	// 8000kHz / 32 / 250 = 1kHz ~ 1ms
+	TCCR2B = (1<<CS21)|(1<<CS20);
+	// TOP of 250
+	OCR2A = 250;
+	// enable compare interrupt
+	TIMSK2 = (1<<OCIE2A);
 	
 	// turn off all LEDs
 	BLUE::setOutput(xpcc::gpio::LOW);
 	RED::setOutput(xpcc::gpio::LOW);
 	GREEN::setOutput(xpcc::gpio::LOW);
 	
-	SYNC::setInput();
-	EVENT::setInput();
 	SENSOR1::setInput();
 	SENSOR2::setInput();
 	SENSOR3::setInput();
 	LIGHT_SENSOR::setInput();
 	
 	// set up the oversampling of the photosensitive diode
-	Adc::initialize(xpcc::atmega::Adc::REFERENCE_AREF, xpcc::atmega::Adc::PRESCALER_32);
-	photo::initialize(adcMap, &photoData);
+//	Adc::initialize(xpcc::atmega::Adc::REFERENCE_AREF, xpcc::atmega::Adc::PRESCALER_32);
+//	photo::initialize(adcMap, &photoData);
 	
 	// init is done, full power, Skotty!
 	xpcc::atmega::enableInterrupts();

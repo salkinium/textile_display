@@ -61,7 +61,7 @@ rprNode(xpcc::accessor::asFlash(listenList),
 		  sizeof(listenList) / sizeof(xpcc::rpr::Listener));
 
 #include <xpcc/workflow.hpp>
-xpcc::PeriodicTimer<> timer(16);
+xpcc::PeriodicTimer<> timer(20);
 
 MAIN_FUNCTION
 {
@@ -79,7 +79,7 @@ MAIN_FUNCTION
 	SYNC::setOutput();
 	EVENT::setOutput();
 	
-	rprNode.setAddress(common::id::CONTROL, common::group::GROUP0);
+	rprNode.setAddress(common::id::CONTROL, common::group::CONTROL);
 	FadingColor fade;
 	fade.time = 10;
 	fade.color.red = 0;
@@ -90,15 +90,23 @@ MAIN_FUNCTION
 	{
 		rprNode.update();
 		
+//		uint8_t buffer;
+//		if (loggerUart.read(buffer))
+//		{
+//			rprUart.write(buffer);
+//		}
+		
+		//*
 		if (timer.isExpired())
 		{
-			EVENT::toggle();
+//			EVENT::toggle();
 			
 			fade.color.red   -= 1;
 			fade.color.green -= 1;
 			fade.color.blue  -= 1;
 			
-			uint8_t buffer[20];
+			uint8_t buffer[48];
+//			std::memset(buffer, 0, 48);
 			// PIXEL1
 			buffer[0] = fade.color.red,
 			buffer[1] = fade.color.green,
@@ -119,7 +127,8 @@ MAIN_FUNCTION
 			buffer[12] = fade.color.red + 40,
 			buffer[13] = fade.color.green + 40,
 			buffer[14] = fade.color.blue + 40,
-			rprNode.multicastMessage(common::group::GROUP1, common::command::SET_COLOR, &buffer, 15);
+			rprNode.multicastMessage(common::group::GROUP0, common::command::SET_COLOR, &buffer, 48);
+			rprNode.broadcastMessage(common::command::SWAP_COLOR, 0, 0);
 			
 //			static FadingColor fadeTransmit;
 //			fadeTransmit.time = 10;
@@ -143,7 +152,7 @@ MAIN_FUNCTION
 //			fadeTransmit.color.green += 10;
 //			fadeTransmit.color.blue  += 10;
 //			rprNode.unicastMessage(common::id::PIXEL1, common::command::SET_COLOR, &fadeTransmit, 5);
-		}
+		}//*/
 	}
 }
 

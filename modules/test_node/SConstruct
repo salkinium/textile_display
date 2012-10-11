@@ -1,14 +1,13 @@
 # WARNING: This file is generated automatically, do not edit!
 
 # path to the xpcc root directory
-rootpath = "../"
-xpccpath = rootpath + "../xpcc"
+rootpath = "../.."
+xpccpath = rootpath + "/../xpcc_rpr"
 
 # default target is 'avr'
 print "Compile for AVR"
-configfile = 'project.cfg'
 
-env = Environment(tools = ['xpcc'], toolpath = [xpccpath + '/scons'], configfile = configfile)
+env = Environment(tools = ['xpcc'], rootpath = xpccpath)
 
 # find all source files
 files = env.FindFiles(
