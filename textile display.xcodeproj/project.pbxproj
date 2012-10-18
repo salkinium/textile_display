@@ -25,17 +25,17 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		85D9B74C156C2B04001A2501 /* test_node */ = {
+		85D9B74C156C2B04001A2501 /* luminet */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "";
-			buildConfigurationList = 85D9B74F156C2B04001A2501 /* Build configuration list for PBXLegacyTarget "test_node" */;
+			buildConfigurationList = 85D9B74F156C2B04001A2501 /* Build configuration list for PBXLegacyTarget "luminet" */;
 			buildPhases = (
 			);
 			buildToolPath = scons;
-			buildWorkingDirectory = /Users/niklas/development/textile_display/modules/test_node;
+			buildWorkingDirectory = /Users/niklas/development/textile_display/modules/luminet;
 			dependencies = (
 			);
-			name = test_node;
+			name = luminet;
 			passBuildSettingsInEnvironment = 1;
 			productName = ahrs;
 		};
@@ -75,7 +75,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				85D9B74C156C2B04001A2501 /* test_node */,
+				85D9B74C156C2B04001A2501 /* luminet */,
 				85FE784C15DE2A6B0046A8F7 /* stm32_test */,
 			);
 		};
@@ -146,7 +146,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		85D9B74F156C2B04001A2501 /* Build configuration list for PBXLegacyTarget "test_node" */ = {
+		85D9B74F156C2B04001A2501 /* Build configuration list for PBXLegacyTarget "luminet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				85D9B74D156C2B04001A2501 /* Debug */,

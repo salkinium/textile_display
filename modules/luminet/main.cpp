@@ -66,6 +66,7 @@ public:
 	void
 	getID(xpcc::rpr::Transmitter& node, xpcc::rpr::Message *message)
 	{
+		// colomns, rows, groupsize, groupid
 		uint8_t buffer[4] = {8,8,16,volatileGroupPixel};
 		node.unicastMessage(message->source, common::command::ANSWER_ID, buffer, 4);
 	}
