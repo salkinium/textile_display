@@ -7,18 +7,16 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		8591B03015DA8B47002EC4CA /* modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = modules; sourceTree = "<group>"; };
-		859B0CBD156C2449008BB03E /* xpcc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xpcc; path = ../xpcc/src/xpcc; sourceTree = "<group>"; };
-		859B0CBF156C24C2008BB03E /* xpcc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xpcc; path = ../xpcc; sourceTree = "<group>"; };
+		85EB5DC01630BBD6003D2A9B /* modules */ = {isa = PBXFileReference; lastKnownFileType = folder; name = modules; sourceTree = "<group>"; };
+		85EB5DC11630BC12003D2A9B /* xpcc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xpcc; path = ../../xpcc_rpr/src/xpcc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		855A80891302F7C600E9FB14 = {
 			isa = PBXGroup;
 			children = (
-				8591B03015DA8B47002EC4CA /* modules */,
-				859B0CBD156C2449008BB03E /* xpcc */,
-				859B0CBF156C24C2008BB03E /* xpcc */,
+				85EB5DC01630BBD6003D2A9B /* modules */,
+				85EB5DC11630BC12003D2A9B /* xpcc */,
 			);
 			sourceTree = "<group>";
 		};

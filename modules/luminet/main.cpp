@@ -1,5 +1,7 @@
 // coding: utf-8
 #include <xpcc/architecture/platform.hpp>
+#include <xpcc/architecture/driver.hpp>
+#include <xpcc/workflow.hpp>
 
 // IO #########################################################################
 GPIO__IO(SENSOR1, C, 0);			// ADC0
@@ -23,6 +25,7 @@ typedef xpcc::atmega::AdcInterrupt Adc;
 uint8_t adcMap[1] = {3};
 typedef xpcc::atmega::AnalogSensors< Adc,1,3 > photo;
 uint16_t photoData;
+xpcc::PeriodicTimer<> photoTimer(200);
 
 // COMMUNICATION ##############################################################
 typedef xpcc::atmega::BufferedUart0 primaryUart;
@@ -96,8 +99,6 @@ ISR(TIMER2_COMPA_vect)
 	xpcc::Clock::increment();
 }
 
-#include <xpcc/architecture/driver.hpp>
-#include <xpcc/workflow.hpp>
 MAIN_FUNCTION // FINALLY ######################################################
 {
 	// Fast PWM Mode on timer 0, non-inverting mode
@@ -132,8 +133,8 @@ MAIN_FUNCTION // FINALLY ######################################################
 	LIGHT_SENSOR::setInput();
 	
 	// set up the oversampling of the photosensitive diode
-//	Adc::initialize(xpcc::atmega::Adc::REFERENCE_AREF, xpcc::atmega::Adc::PRESCALER_32);
-//	photo::initialize(adcMap, &photoData);
+	Adc::initialize(xpcc::atmega::Adc::REFERENCE_AREF, xpcc::atmega::Adc::PRESCALER_32);
+	photo::initialize(adcMap, &photoData);
 	
 	volatileGroupPixel = eeprom_read_byte(&NonVolatileGroupPixel);
 	rprNode.setAddress(eeprom_read_word(&NonVolatileAddress), eeprom_read_word(&NonVolatileGroupAddress));
@@ -142,6 +143,18 @@ MAIN_FUNCTION // FINALLY ######################################################
 	
 	while (1)
 	{
+		if (photoTimer.isExpired())
+		{
+			photo::readSensors();
+		}
+		
+		if (photo::isNewDataAvailable())
+		{
+			uint16_t *data = photo::getData();
+			// do something with it.
+			(void) data;
+		}
+		
 		rprNode.update();
 		
 		led.update();

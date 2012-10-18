@@ -39,7 +39,7 @@
 
 
 /**
- * \brief LED Implementation for the TLC594X.
+ * \brief LED PWM implementation for a timer.
  *
  * \author	Niklas Hauser
  * \ingroup led
