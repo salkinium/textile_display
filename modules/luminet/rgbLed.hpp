@@ -22,11 +22,14 @@ public:
 	}
 	
 	ALWAYS_INLINE void
-	fadeToRgbColorValue(uint16_t time, uint8_t redValue, uint8_t greenValue, uint8_t blueValue)
+	fadeToRgbColorValue(uint16_t /*time*/, uint8_t redValue, uint8_t greenValue, uint8_t blueValue)
 	{
-		red.fadeTo(time, redValue);
-		green.fadeTo(time, greenValue);
-		blue.fadeTo(time, blueValue);
+		red.setBrightness(redValue);
+		green.setBrightness(greenValue);
+		blue.setBrightness(blueValue);
+//		red.fadeTo(time, redValue);
+//		green.fadeTo(time, greenValue);
+//		blue.fadeTo(time, blueValue);
 	}
 	
 	ALWAYS_INLINE void
@@ -38,9 +41,9 @@ public:
 	ALWAYS_INLINE void
 	update()
 	{
-		red.run();
-		green.run();
-		blue.run();
+//		red.run();
+//		green.run();
+//		blue.run();
 		
 		if (red.getBrightness() == 0) TCCR1A &= ~(1<<COM1A1);
 		else TCCR1A |= (1<<COM1A1);

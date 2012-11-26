@@ -39,6 +39,8 @@ namespace common
 			CONFIRMATION = 0xfb,
 			REQUEST_ID = 'I',
 			ANSWER_ID = 'J',
+			REQUEST_PHOTO = 'K',
+			ANSWER_PHOTO = 'L',
 		};
 	}
 	

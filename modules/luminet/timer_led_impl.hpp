@@ -44,7 +44,7 @@ template < const uint8_t* PwmTable,  uint8_t const PwmTableSize >
 void
 TimerLed<PwmTable, PwmTableSize>::setBrightness(uint8_t brightness)
 {
-	fadeTime = 0;
+//	fadeTime = 0;
 	currentValue = brightness;
 	*overflow = table[currentValue];
 }
