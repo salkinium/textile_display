@@ -8,26 +8,12 @@
 
 #import <UIKit/UIKit.h>
 @class TDPixel;
-@class TDSettingsViewController;
 
 @protocol TDMatrixDelegate
 -(void)matrixModified:(BOOL)matrixWritten;
 @end
 
 @interface TDMatrix : UIView
-{
-	CALayer *_frameLayer;
-	CGPoint _cursor;
-	NSInteger _offset;
-	NSTimer *_renderTimer;
-	const uint8_t *_fontBuffer;
-	NSInteger _scrollSpeed;
-	
-	int _previousColomn;
-	int _previousRow;
-	
-	TDSettingsViewController *_settingsController;
-}
 
 @property (unsafe_unretained) id<TDMatrixDelegate> delegate;
 @property (nonatomic) UIColor *currentColor;
@@ -41,6 +27,8 @@
 -(void)clear;
 -(void)pauseRendering;
 -(void)resumeRendering;
+-(void)startDreaming;
+-(void)stopDreaming;
 
 -(void)fillWithColor:(UIColor *)color;
 -(void)drawImage:(const uint8_t *)data

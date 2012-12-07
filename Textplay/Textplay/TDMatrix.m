@@ -17,18 +17,40 @@
 DDDefineContext(kTDSettingsValueChanged);
 
 @interface TDMatrix ()
+{
+	CALayer *_frameLayer;
+	CGPoint _cursor;
+	NSInteger _offset;
+	NSTimer *_renderTimer;
+	const uint8_t *_fontBuffer;
+	NSInteger _scrollSpeed;
+	
+	int _previousColomn;
+	int _previousRow;
+	
+	TDSettingsViewController *_settingsController;
+	
+	NSTimer *_dreamTimer;
+	NSTimer *_dreamRed;
+	NSTimer *_dreamGreen;
+	NSTimer *_dreamBlue;
+	
+	struct RgbColor colorCounter;
+	struct RgbColor colorFading;
+	struct RgbColor colorMaximum;
+}
+
 -(void)renderText;
 -(BOOL)writeChar:(char)c;
 -(const uint8_t *)fontForName:(NSString *)name;
+-(void)updateDream;
+-(void)updateRed;
+-(void)updateGreen;
+-(void)updateBlue;
+
 @end
 
 @implementation TDMatrix
-
-@synthesize currentColor = _currentColor;
-@synthesize rows = _rows;
-@synthesize colomns = _colomns;
-@synthesize pixelArray = _pixelArray;
-@synthesize text = _text;
 
 -(void)awakeFromNib
 {
@@ -64,6 +86,7 @@ DDDefineContext(kTDSettingsValueChanged);
 						  forKeyPath:@"scrollSpeed"
 							 options:NSKeyValueObservingOptionNew
 							 context:kTDSettingsValueChanged];
+	srand(70);
 }
 
 #pragma mark - data outputs
@@ -107,6 +130,138 @@ DDDefineContext(kTDSettingsValueChanged);
 	_previousColomn = -1;
 	_previousRow = -1;
 	_text = @"";
+	[self stopDreaming];
+}
+
+#pragma mark - dreaming
+
+-(void)startDreaming
+{
+	[self clear];
+	_dreamTimer = [NSTimer scheduledTimerWithTimeInterval:1.f/50
+												   target:self
+												 selector:@selector(updateDream)
+												 userInfo:nil
+												  repeats:YES];
+	_dreamRed   = [NSTimer scheduledTimerWithTimeInterval:(rand()%70)*1.f/1000.f
+												   target:self
+												 selector:@selector(updateRed)
+												 userInfo:nil
+												  repeats:NO];
+	_dreamGreen = [NSTimer scheduledTimerWithTimeInterval:(rand()%80)*1.f/1000
+												   target:self
+												 selector:@selector(updateGreen)
+												 userInfo:nil
+												  repeats:NO];
+	_dreamBlue  = [NSTimer scheduledTimerWithTimeInterval:(rand()%90)*1.f/1000
+												   target:self
+												 selector:@selector(updateBlue)
+												 userInfo:nil
+												  repeats:NO];
+//	NSLog(@"startDreaming");
+}
+
+-(void)stopDreaming
+{
+//	NSLog(@"stopDreaming");
+	[_dreamTimer invalidate];
+	[_dreamRed   invalidate];
+	[_dreamGreen invalidate];
+	[_dreamBlue  invalidate];
+}
+
+-(void)updateRed
+{
+	colorFading.red -= 1;
+//	colorCounter.red -= 1;
+//	colorFading.red = colorCounter.red;
+//	
+//	if (colorCounter.red > colorMaximum.red)
+//		colorFading.red = colorMaximum.red;
+	
+	_dreamRed   = [NSTimer scheduledTimerWithTimeInterval:(rand()%70)*1.f/1000
+												   target:self
+												 selector:@selector(updateRed)
+												 userInfo:nil
+												  repeats:NO];
+}
+
+-(void)updateGreen
+{
+	colorFading.green -= 1;
+//	colorCounter.green -= 1;
+//	colorFading.green = colorCounter.green;
+//	
+//	if (colorCounter.green > colorMaximum.green)
+//		colorFading.green = colorMaximum.green;
+	
+	_dreamGreen = [NSTimer scheduledTimerWithTimeInterval:(rand()%80)*1.f/1000
+												   target:self
+												 selector:@selector(updateGreen)
+												 userInfo:nil
+												  repeats:NO];
+}
+
+-(void)updateBlue
+{
+	colorFading.blue -= 1;
+//	colorCounter.blue -= 1;
+//	colorFading.blue = colorCounter.blue;
+//	
+//	if (colorCounter.blue > colorMaximum.blue)
+//		colorFading.blue = colorMaximum.blue;
+	
+	_dreamBlue  = [NSTimer scheduledTimerWithTimeInterval:(rand()%90)*1.f/1000
+												   target:self
+												 selector:@selector(updateBlue)
+												 userInfo:nil
+												  repeats:NO];
+}
+
+-(void)updateDream
+{
+//	NSLog(@"current: %i %i %i", colorFading.red, colorFading.green, colorFading.blue);
+	int i=1;
+	for (TDPixel *pixel in _pixelArray)
+	{
+		uint8_t red   = colorFading.red   + (i+32)* 8;
+		if (red > colorMaximum.red) red = colorMaximum.red;
+		
+		uint8_t green = colorFading.green + (i+32)*10;
+		if (green > colorMaximum.green) green = colorMaximum.green;
+		
+		uint8_t blue  = colorFading.blue  + (i+32)*12;
+		if (blue > colorMaximum.blue) blue = colorMaximum.blue;
+		
+		UIColor *color = [UIColor colorWithRGBHex:((red << 16) | (green << 8) | blue)];
+		
+		pixel.color = color;
+		i++;
+	}
+	[self.delegate matrixModified:YES];
+	
+	CGFloat red, green, blue, alpha;
+	[_currentColor red:&red green:&green blue:&blue alpha:&alpha];
+	struct RgbColor max = {red*255, green*255, blue*255};
+	
+//	NSLog(@"max: %i %i %i", max.red, max.green, max.blue);
+	
+	if (colorMaximum.red > max.red)
+		colorMaximum.red--;
+	else if (colorMaximum.red < max.red)
+		colorMaximum.red++;
+	
+	if (colorMaximum.green > max.green)
+		colorMaximum.green--;
+	else if (colorMaximum.green < max.green)
+		colorMaximum.green++;
+	
+	if (colorMaximum.blue > max.blue)
+		colorMaximum.blue--;
+	else if (colorMaximum.blue < max.blue)
+		colorMaximum.blue++;
+	
+//	NSLog(@"current max: %i %i %i", colorMaximum.red, colorMaximum.green, colorMaximum.blue);
 }
 
 #pragma mark - font rendering
@@ -128,6 +283,8 @@ DDDefineContext(kTDSettingsValueChanged);
 -(void)setText:(NSString *)text
 {
 	_text = text;
+	[self stopDreaming];
+	
 	if (![text isEqualToString:@""])
 	{
 		_offset = 2;

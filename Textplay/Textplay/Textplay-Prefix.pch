@@ -51,4 +51,9 @@ CGPointMake(rect.size.width/2, rect.size.height/2)
 // http://www.dribin.org/dave/blog/archives/2008/09/24/proper_kvo_usage/
 #define DDDefineContext(_X_) static void * _X_ = @#_X_
 
-
+struct RgbColor
+{
+	uint8_t red;
+	uint8_t green;
+	uint8_t blue;
+};

@@ -22,6 +22,11 @@ typedef enum
 } TDAddress;
 
 @interface TDCommunicator ()
+{
+	BOOL _validURL;
+	GCDAsyncSocket *_asyncSocket;
+}
+
 // tricking the KVO to give us a setter for this, hihi ;)
 @property (nonatomic, readwrite) NSString *connectionStatus;
 @property (nonatomic, readwrite) NSString *connectionError;
@@ -35,14 +40,10 @@ typedef enum
 		 withPayload:(NSData *)payload;
 -(uint16_t)updateCrc:(uint16_t)crc withData:(uint8_t)data;
 -(uint8_t *)escapeByte:(uint8_t)data intoBuffer:(uint8_t *)buffer;
+
 @end
 
 @implementation TDCommunicator
-
-@synthesize connectionURL = _connectionURL;
-@synthesize connectionStatus = _connectionStatus;
-@synthesize address = _address;
-@synthesize groupAddress = _groupAddress;
 
 -(id)init
 {
@@ -104,11 +105,11 @@ typedef enum
 			port = [[formatter numberFromString:components[1]] intValue];
 		}
 		
-		if ([_asyncSocket.connectedHost isEqualToString:components[0]] && _asyncSocket.connectedPort == port)
-		{
-			NSLog(@"already connected to %@:%d", components[0], port);
-		}
-		else
+//		if ([_asyncSocket.connectedHost isEqualToString:components[0]] && _asyncSocket.connectedPort == port)
+//		{
+//			NSLog(@"already connected to %@:%d", components[0], port);
+//		}
+//		else
 		{
 			self.connectionStatus = @"disconnecting...";
 			[_asyncSocket disconnect];

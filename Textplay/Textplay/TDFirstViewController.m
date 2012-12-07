@@ -14,6 +14,25 @@
 DDDefineContext(kTDCommunicatorValueChanged);
 
 @interface TDFirstViewController ()
+{
+	IBOutlet TDMatrix *_matrix;
+	IBOutlet UIButton *_colorButton;
+	IBOutlet UIButton *_playButton;
+	IBOutlet UITextField *_textField;
+	IBOutlet UILabel *_connectionStatusLabel;
+	IBOutlet UIButton *_clearButton;
+	
+	BOOL _continousRefresh;
+	
+	TDSettingsViewController *_settingsController;
+	TDCommunicator *_communicator;
+}
+
+-(IBAction)selectPlayback:(id)sender;
+-(IBAction)selectColor:(id)sender;
+-(IBAction)resetMatrix:(id)sender;
+-(IBAction)setText:(id)sender;
+-(IBAction)showSettings:(id)sender;
 
 @end
 
@@ -111,6 +130,13 @@ DDDefineContext(kTDCommunicatorValueChanged);
 -(IBAction)setText:(id)sender
 {
 	NSString *text = [sender text];
+	
+	if ([text isEqualToString:@":dc"])
+	{
+		[_matrix startDreaming];
+		return;
+	}
+	
 	[_matrix setText:text];
 	
 	if (!_continousRefresh)

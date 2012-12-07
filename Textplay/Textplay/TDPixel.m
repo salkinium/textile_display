@@ -11,8 +11,6 @@
 
 @implementation TDPixel
 
-@synthesize color = _color;
-
 -(id)initWithSize:(CGSize)size position:(CGPoint)position
 {
 	if (self = [super initWithBounds:CGRectMake(0, 0, size.width, size.height) position:position anchorPoint:CGPointMakeHalf delegate:self])
@@ -23,6 +21,10 @@
 	return self;
 }
 
+-(void)dealloc
+{
+	_color = nil;
+}
 
 -(void)drawInContext:(CGContextRef)ctx
 {

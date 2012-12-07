@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-@class GCDAsyncSocket;
 
 typedef enum
 {
@@ -18,10 +17,6 @@ typedef enum
 } TDMessageType;
 
 @interface TDCommunicator : NSObject
-{
-	BOOL _validURL;
-	GCDAsyncSocket *_asyncSocket;
-}
 
 @property (nonatomic) NSString *connectionURL;
 @property (nonatomic, readonly) NSString *connectionStatus;

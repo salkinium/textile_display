@@ -7,8 +7,6 @@
 //
 
 @interface TDPixel : CALayer
-{
-}
 
 @property (nonatomic) UIColor *color;
 
