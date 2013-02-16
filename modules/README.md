@@ -1,18 +1,19 @@
-
 Luminet2 Pixel Software
 =======================
 
-The hardware is powered by the [XPCC library][xpcc], used for its communication
-and peripheral modules, written in C++.
+The sources are compiled using the [XPCC library][xpcc], which is used for
+GPIO, Processing, Build System and Serial Debugging.
+
+The fuses are set at 0xef (low), 0xd1 (high), 0x07 (extended).
 
 
-RGB LED
--------
+Color generation
+----------------
 
-The color is generated using 8-bit PWM and a gamma-corrected look-up table,
-stored in flash memory.
+The color is generated using 8-bit PWM and a [gamma-corrected][gamma] look-up
+table stored in flash memory.
 This guarantees fast access times and correct color perception, however
-generating very dark colors does not yield good results, due to limited
+generating very dark colors does not yield good results due to limited
 PWM value range.
 
 
@@ -20,7 +21,7 @@ Photosensitive Diode
 --------------------
 
 Light intensity is measured using an oversampling and averaging algorithm.
-The results are currenlty not used.
+The results are currently not used.
 
 
 Communication
@@ -46,5 +47,39 @@ A more detailed description of the frame format [can be found here][rpr].
 The pixels communicate directly with a WiFly module in ad-hoc mode, at a
 baudrate of 0.5Mbps (500000 bits/s).
 
+
+Installing XPCC
+---------------
+
+XPCC is provided as a git submodule, to use it run this in the root directory:
+
+	$ git submodule init
+	$ git submodule update
+
+
+To install the XPCC build system on OS X (tested on Lion/Mountain Lion):
+
+1.	Install [Homebrew][]:  
+	`$ ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"`
+2.	Install some dependencies:  
+	`$ brew install scons python`  
+	`$ pip install lxml jinja2`
+3.	Install the latest precompiled version of [avr-gcc from ObDev][obdev].
+
+
+To install the XPCC build system on Linux (tested on Ubuntu 12.04):
+
+	$ sudo apt-get update
+	$ sudo apt-get install python scons python-jinja2 python-lxml \
+	gcc-avr binutils-avr avr-libc avrdude
+
+
+Extensive information on installing [the XPCC build system can be found here][xpcc-install].
+
+
 [xpcc]: https://github.com/roboterclubaachen/xpcc
+[gamma]: http://en.wikipedia.org/wiki/Gamma_correction
 [rpr]: https://raw.github.com/roboterclubaachen/xpcc/feature/resilient_packet_ring/src/xpcc/driver/connectivity/rpr.hpp
+[homebrew]: http://mxcl.github.com/homebrew/
+[obdev]: http://www.obdev.at/products/crosspack/download.html
+[xpcc-install]: http://xpcc.kreatives-chaos.com/install.html

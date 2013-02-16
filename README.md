@@ -43,11 +43,9 @@ well as providing it with power and communication abilities.
 
 ### Communication
 
-All pixels can exchange information between each other and an external node.
-
+All pixels can exchange information between each other and an external node.  
 Internally all nodes are attached to a wired ring bus, which is based on serial
 communication and runs at high speed (0.5MBaud).
-
 This bus is simply connected to a WiFly module which enables transparent
 communication over WiFi using TCP/IP.
 
