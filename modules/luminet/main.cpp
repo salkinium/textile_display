@@ -160,7 +160,7 @@ MAIN_FUNCTION // FINALLY ######################################################
 	
 	xpcc::atmega::enableInterrupts();
 	
-	/*
+	//*
 	xpcc::Timeout<> redT(29);
 	xpcc::Timeout<> greenT(21);
 	xpcc::Timeout<> blueT(38);
@@ -224,7 +224,7 @@ MAIN_FUNCTION // FINALLY ######################################################
 	{
 		rprNode.update();
 		
-		/*
+		//*
 		if (colorT.isExpired())
 		{
 			static uint8_t maxState = 0;

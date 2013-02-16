@@ -34,6 +34,7 @@ DDDefineContext(kTDSettingsValueChanged);
 	NSTimer *_dreamRed;
 	NSTimer *_dreamGreen;
 	NSTimer *_dreamBlue;
+	NSTimer *_dreamUpdater;
 	
 	struct RgbColor colorCounter;
 	struct RgbColor colorFading;
@@ -47,6 +48,7 @@ DDDefineContext(kTDSettingsValueChanged);
 -(void)updateRed;
 -(void)updateGreen;
 -(void)updateBlue;
+-(void)updateMatrix;
 
 @end
 
@@ -138,11 +140,18 @@ DDDefineContext(kTDSettingsValueChanged);
 -(void)startDreaming
 {
 	[self clear];
-	_dreamTimer = [NSTimer scheduledTimerWithTimeInterval:1.f/50
+	_dreamTimer = [NSTimer scheduledTimerWithTimeInterval:1.f/60
 												   target:self
 												 selector:@selector(updateDream)
 												 userInfo:nil
 												  repeats:YES];
+	
+	_dreamUpdater = [NSTimer scheduledTimerWithTimeInterval:1.f/20
+												   target:self
+												 selector:@selector(updateMatrix)
+												 userInfo:nil
+												  repeats:YES];
+	
 	_dreamRed   = [NSTimer scheduledTimerWithTimeInterval:(rand()%70)*1.f/1000.f
 												   target:self
 												 selector:@selector(updateRed)
@@ -168,6 +177,7 @@ DDDefineContext(kTDSettingsValueChanged);
 	[_dreamRed   invalidate];
 	[_dreamGreen invalidate];
 	[_dreamBlue  invalidate];
+	[_dreamUpdater invalidate];
 }
 
 -(void)updateRed
@@ -218,6 +228,11 @@ DDDefineContext(kTDSettingsValueChanged);
 												  repeats:NO];
 }
 
+-(void)updateMatrix
+{
+	[self.delegate matrixModified:YES];
+}
+
 -(void)updateDream
 {
 //	NSLog(@"current: %i %i %i", colorFading.red, colorFading.green, colorFading.blue);
@@ -238,7 +253,6 @@ DDDefineContext(kTDSettingsValueChanged);
 		pixel.color = color;
 		i++;
 	}
-	[self.delegate matrixModified:YES];
 	
 	CGFloat red, green, blue, alpha;
 	[_currentColor red:&red green:&green blue:&blue alpha:&alpha];
