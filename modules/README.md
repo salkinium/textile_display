@@ -4,8 +4,6 @@ Luminet2 Pixel Software
 The sources are compiled using the [XPCC library][xpcc], which is used for
 GPIO, Processing, Build System and Serial Debugging.
 
-The fuses are set at 0xef (low), 0xd1 (high), 0x07 (extended).
-
 
 Color generation
 ----------------
@@ -46,6 +44,35 @@ A more detailed description of the frame format [can be found here][rpr].
 
 The pixels communicate directly with a WiFly module in ad-hoc mode, at a
 baudrate of 0.5Mbps (500000 bits/s).
+
+
+Firmware
+--------
+
+The sources are compiled using the [XPCC library][xpcc], which is used for
+GPIO, Processing, Build System and Serial Debugging.  
+Enter the `source` directory
+
+	$ cd /path/to/textile_display/modules/source
+
+To compile, execute:
+
+	$ scons
+
+To set the fuses on the microcontroller, execute:
+
+	$ scons fuse
+
+To flash the binary onto the microcontroller, execute:
+
+	$ scons program
+
+
+The fuses are set at 0xef (low), 0xd1 (high), 0x07 (extended).  
+You can set the fuses manually using this command:
+
+	$ avrdude -p atmega328p -c avrispmkii -P usb -u \
+	-U hfuse:w:0xd1:m -U efuse:w:0x07:m -U lfuse:w:0xef:m
 
 
 Installing XPCC
