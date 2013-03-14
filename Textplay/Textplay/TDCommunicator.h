@@ -28,4 +28,6 @@ typedef enum
 
 -(void)sendFrameWithData:(NSData *)data;
 
++(NSString *)currentWifiSSID;
+
 @end

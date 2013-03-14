@@ -53,7 +53,7 @@ DDDefineContext(kTDCommunicatorValueChanged);
     [super viewDidLoad];
 	
 //	_ipAddressPortText.text = _connectionURL;
-	_statusLabel.text = [_communicator connectionStatus];
+	_statusLabel.text = _communicator.connectionError;
 	_fontName.text = _font;
 	
 	_speedStepper.minimumValue = 1;
@@ -74,6 +74,14 @@ DDDefineContext(kTDCommunicatorValueChanged);
 	[self setIpAddressPort:_ipAddressPortText];
 	
     // Do any additional setup after loading the view from its nib.
+}
+
+-(void)dealloc
+{
+	_fontArray = nil;
+	_communicator = nil;
+	_connectionURL = nil;
+	_font = nil;
 }
 
 - (void)didReceiveMemoryWarning

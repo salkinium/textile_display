@@ -57,8 +57,10 @@ DDDefineContext(kTDCommunicatorValueChanged);
 	_clearButton.hidden = YES;
 	_playButton.hidden = YES;
 	_matrix.delegate = self;
+	_textField.text = @":dream";
+	[_matrix startDreaming];
 	_continousRefresh = YES;
-	[self setSelectedColor:[UIColor yellowColor]];
+	[self setSelectedColor:[UIColor whiteColor]];
 	_colorButton.titleLabel.textColor = [UIColor blackColor];
 	[_communicator setAddress:0x12ff];
 	[_communicator setGroupAddress:0x12ff];
@@ -67,6 +69,13 @@ DDDefineContext(kTDCommunicatorValueChanged);
 					   options:NSKeyValueObservingOptionNew
 					   context:kTDCommunicatorValueChanged];
 	_communicator.connectionURL = @"169.254.1.1";
+}
+
+-(void)dealloc
+{
+	_settingsController = nil;
+	[_communicator removeObserver:self forKeyPath:@"connectionStatus"];
+	_communicator = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -131,7 +140,7 @@ DDDefineContext(kTDCommunicatorValueChanged);
 {
 	NSString *text = [sender text];
 	
-	if ([text isEqualToString:@":dc"])
+	if ([text isEqualToString:@":dream"])
 	{
 		[_matrix startDreaming];
 		return;

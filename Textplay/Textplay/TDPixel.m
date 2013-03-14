@@ -28,7 +28,7 @@
 
 -(void)drawInContext:(CGContextRef)ctx
 {
-	const CGFloat _radius = MIN(self.bounds.size.height/2, self.bounds.size.width/2);
+	CGFloat _radius = MIN(self.bounds.size.height/2, self.bounds.size.width/2);
 	
 	[ADPath fillEllipse:CGRectMake(_radius*0.95, _radius*0.95, _radius*0.1, _radius*0.1) inContext:ctx inColor:[UIColor whiteColor]];
 }

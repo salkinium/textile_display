@@ -9,8 +9,7 @@
 /* Begin PBXBuildFile section */
 		8520F02116245B04004A319B /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 8520F02016245B04004A319B /* UIColor-Expanded.m */; };
 		8520F02D16248068004A319B /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8520F02C16248068004A319B /* GCDAsyncSocket.m */; };
-		8520F033162483E2004A319B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8520F032162483E2004A319B /* CFNetwork.framework */; };
-		8520F035162483E8004A319B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8520F034162483E8004A319B /* Security.framework */; };
+		8520F035162483E8004A319B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8520F034162483E8004A319B /* Security.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		855691A41611EDFF008A8D4F /* HRBrightnessCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 855691991611EDFF008A8D4F /* HRBrightnessCursor.m */; };
 		855691A51611EDFF008A8D4F /* HRCgUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8556919B1611EDFF008A8D4F /* HRCgUtil.m */; };
 		855691A61611EDFF008A8D4F /* HRColorCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8556919D1611EDFF008A8D4F /* HRColorCursor.m */; };
@@ -33,6 +32,8 @@
 		857C66261610B86900A52C3C /* CALayer+Init.m in Sources */ = {isa = PBXBuildFile; fileRef = 857C66241610B86900A52C3C /* CALayer+Init.m */; };
 		857C66351610BEC400A52C3C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 857C66341610BEC400A52C3C /* QuartzCore.framework */; };
 		857C66381610E92400A52C3C /* TDMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 857C66371610E92400A52C3C /* TDMatrix.m */; };
+		85B0D9BB16F2678D00F728E5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8520F032162483E2004A319B /* CFNetwork.framework */; };
+		85B0D9BC16F267CA00F728E5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B0D9B916F2677400F728E5 /* SystemConfiguration.framework */; };
 		85BC148E1614A73800F07FC1 /* TDSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85BC148C1614A73800F07FC1 /* TDSettingsViewController.m */; };
 		85BC148F1614A73800F07FC1 /* TDSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85BC148D1614A73800F07FC1 /* TDSettingsViewController.xib */; };
 		85E098701620683F00C96829 /* all_caps_3x5.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E098561620683F00C96829 /* all_caps_3x5.m */; };
@@ -93,6 +94,7 @@
 		857C66341610BEC400A52C3C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		857C66361610E92400A52C3C /* TDMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMatrix.h; sourceTree = "<group>"; };
 		857C66371610E92400A52C3C /* TDMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMatrix.m; sourceTree = "<group>"; };
+		85B0D9B916F2677400F728E5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		85BC148B1614A73800F07FC1 /* TDSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSettingsViewController.h; sourceTree = "<group>"; };
 		85BC148C1614A73800F07FC1 /* TDSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSettingsViewController.m; sourceTree = "<group>"; };
 		85BC148D1614A73800F07FC1 /* TDSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TDSettingsViewController.xib; sourceTree = "<group>"; };
@@ -125,8 +127,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85B0D9BB16F2678D00F728E5 /* CFNetwork.framework in Frameworks */,
+				85B0D9BC16F267CA00F728E5 /* SystemConfiguration.framework in Frameworks */,
 				8520F035162483E8004A319B /* Security.framework in Frameworks */,
-				8520F033162483E2004A319B /* CFNetwork.framework in Frameworks */,
 				857C66351610BEC400A52C3C /* QuartzCore.framework in Frameworks */,
 				857C65E216106C6600A52C3C /* UIKit.framework in Frameworks */,
 				857C65E416106C6600A52C3C /* Foundation.framework in Frameworks */,
@@ -185,6 +188,7 @@
 		857C65E016106C6600A52C3C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				85B0D9B916F2677400F728E5 /* SystemConfiguration.framework */,
 				8520F034162483E8004A319B /* Security.framework */,
 				8520F032162483E2004A319B /* CFNetwork.framework */,
 				857C66341610BEC400A52C3C /* QuartzCore.framework */,

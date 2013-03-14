@@ -91,6 +91,23 @@ DDDefineContext(kTDSettingsValueChanged);
 	srand(70);
 }
 
+-(void)dealloc
+{
+	[self clear];
+	_currentColor = nil;
+	_pixelArray = nil;
+	_text = nil;
+	_frameLayer = nil;
+	_renderTimer = nil;
+	_fontBuffer = nil;
+	_settingsController = nil;
+	_dreamBlue = nil;
+	_dreamGreen = nil;
+	_dreamRed = nil;
+	_dreamTimer = nil;
+	_dreamUpdater = nil;
+}
+
 #pragma mark - data outputs
 
 -(NSData *)frameData

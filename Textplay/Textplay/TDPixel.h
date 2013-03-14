@@ -8,7 +8,7 @@
 
 @interface TDPixel : CALayer
 
-@property (nonatomic) UIColor *color;
+@property (nonatomic, readwrite, strong) UIColor *color;
 
 -(id)initWithSize:(CGSize)size position:(CGPoint)position;
 
