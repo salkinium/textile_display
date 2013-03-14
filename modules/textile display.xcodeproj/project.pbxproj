@@ -30,7 +30,7 @@
 			buildPhases = (
 			);
 			buildToolPath = scons;
-			buildWorkingDirectory = /Users/niklas/development/textile_display/modules/luminet;
+			buildWorkingDirectory = /Users/niklas/development/textile_display/modules/source;
 			dependencies = (
 			);
 			name = luminet;

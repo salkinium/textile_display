@@ -66,7 +66,7 @@ This repository is organized as follows:
 - 	The *module* folder contains the embedded code for the Luminet2 pixels.
 -	The *Textplay* folder contains the iOS App to control the display.
 
-The Luminet2 Smart Pixel were designed by [Mariana Bocoi][bocoi]
+The Luminet2 Smart Pixel were designed by [Mariana Bocoi][bocoi].  
 The connection matrix and embedded software were designed by [Niklas Hauser][hauser].
 
 

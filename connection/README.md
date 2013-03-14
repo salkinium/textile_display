@@ -2,7 +2,7 @@
 Connection Matrix
 =================
 
-The vector matrix is generated programmatically using a python script.
+The vector matrix is generated using a python script.
 The four basic tile elements found in the elements/ folder are then copied
 together into the matrix/ folder in .svg format, which is then converted into
 .dxf using inkskape and pstoedit.
