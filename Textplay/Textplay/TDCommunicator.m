@@ -37,6 +37,7 @@ typedef enum
 
 - (BOOL)validateUrl:(NSString *)url;
 - (void)attemptToConnect;
+- (void)sendPreventScreenSaverFrame;
 
 -(NSData *)messageTo:(uint16_t)destination
 			  ofType:(TDMessageType)type
@@ -64,10 +65,10 @@ typedef enum
 		
 		NSString *ssid = [TDCommunicator currentWifiSSID];
 		
-		if (!ssid || [ssid rangeOfString:@"WiFly"].location == NSNotFound)
+		if (!ssid || [ssid rangeOfString:@"Wifly"].location == NSNotFound)
 		{
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"WiFly network not detected!"
-															message:@"You might not be on the same WiFi network as the display. If it fails to connect, go to your Network Settings and select a network with 'WiFly' in its name."
+															message:@"You might not be on the same WiFi network as the display. If it fails to connect, go to your Network Settings (WLAN) and select an open network with 'Wifly-GSX' in its name."
 														   delegate:nil
 												  cancelButtonTitle:@"Ok"
 												  otherButtonTitles:nil];
@@ -174,6 +175,8 @@ typedef enum
 	
 	if (![self.connectionStatus isEqualToString:@"connected"])
 		return;
+	if (data.length < 48*4)
+		return;
 	
 	// send out all the data
 	for (uint_fast8_t groupId=0; groupId < 4; ++groupId)
@@ -200,9 +203,17 @@ typedef enum
 	_cachedData = data;
 	_preventDisplaySleepTimer = [NSTimer scheduledTimerWithTimeInterval:10
 																 target:self
-															   selector:@selector(sendFrameWithData:)
-															   userInfo:_cachedData
+															   selector:@selector(sendPreventScreenSaverFrame)
+															   userInfo:nil
 																repeats:NO];
+}
+
+- (void)sendPreventScreenSaverFrame
+{
+	if (_cachedData != nil)
+	{
+		[self sendFrameWithData:_cachedData];
+	}
 }
 
 #pragma mark - Socket Delegate
