@@ -227,7 +227,7 @@ MAIN_FUNCTION // ##############################################################
 					break;
 			}
 		}
-//		led.update();
+		led.update();
 	}
 	
 	while (1)
@@ -345,11 +345,19 @@ MAIN_FUNCTION // ##############################################################
 					buffer[i*3+1] = fadeC.green + (i+32)*10;
 					buffer[i*3+2] = fadeC.blue + (i+32)*12;
 				}
+				
+				colorBuffer.color.red = *(buffer + volatileGroupPixel*3);
+				colorBuffer.color.green = *(buffer + volatileGroupPixel*3 + 1);
+				colorBuffer.color.blue = *(buffer + volatileGroupPixel*3 + 2);
+				
 				rprNode.multicastMessage(common::group::GROUP0, common::command::SET_COLOR, buffer, 48);
 				rprNode.multicastMessage(common::group::GROUP1, common::command::SET_COLOR, buffer+48, 48);
 				rprNode.multicastMessage(common::group::GROUP2, common::command::SET_COLOR, buffer+48*2, 48);
 				rprNode.multicastMessage(common::group::GROUP3, common::command::SET_COLOR, buffer+48*3, 48);
 				rprNode.broadcastMessage(common::command::SWAP_COLOR, 0, 0);
+				
+				led.fadeToRgbColorValue(0, colorBuffer.color.red, colorBuffer.color.green, colorBuffer.color.blue);
+				
 				
 				if (maxFadeC.red > maxC.red)
 					maxFadeC.red--;
@@ -368,5 +376,6 @@ MAIN_FUNCTION // ##############################################################
 			}
 		}
 #endif
+		led.update();
 	}
 }
