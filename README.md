@@ -38,7 +38,8 @@ For the display to work, these four problems had to be solved:
 A matrix of flexible enameled copper wire was attached to jeans textile using
 a CNC embroilment machine.
 The wires have the function of fixing the Luminet2 PCB to the textile as
-well as providing it with power and communication abilities.
+well as providing it with power and communication abilities.  
+The design process is [described here][design].
 
 
 ### Communication
@@ -47,13 +48,15 @@ All pixels can exchange information between each other and an external node.
 Internally all nodes are attached to a wired ring bus, which is based on serial
 communication and runs at high speed (0.5MBaud).
 This bus is simply connected to a WiFly module which enables transparent
-communication over WiFi using TCP/IP.
+communication over WiFi using TCP/IP.  
+Further information about [the embedded software][embedded].
 
 
 ### iOS app
 
 An iOS application allow the drawing of custom 8x8 textures as well as
-scrolling text in different colors and fonts.
+scrolling text in different colors and fonts.  
+A UI description can be [found here][ui]
 
 
 Organisation
@@ -75,3 +78,6 @@ The connection matrix and embedded software were designed by [Niklas Hauser][hau
 [ita]: http://www.ita.rwth-aachen.de
 [bocoi]: http://hci.rwth-aachen.de/bocoi
 [hauser]: http://hci.rwth-aachen.de/hauser
+[design]: https://amedeo.informatik.rwth-aachen.de/groups/textiledisplay/wiki/0f695/Textile_Connection_Matrix.html
+[embedded]: https://amedeo.informatik.rwth-aachen.de/groups/textiledisplay/wiki/de7d8/Embedded_Software.html
+[ui]: https://amedeo.informatik.rwth-aachen.de/groups/textiledisplay/wiki/711c2/Textplay_iOS_App.html
